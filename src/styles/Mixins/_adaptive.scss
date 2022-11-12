@@ -1,0 +1,23 @@
+@mixin adaptive($size) {
+  @if $size == mob {
+    @media (max-width: 767px) { @content; }
+  }
+  @if $size == mob-landscape {
+    @media (max-height: 767px) and (max-width: 1023px) and (orientation: landscape) { @content; }
+  }
+  @if $size == not-mob {
+    @media (min-width: 1024px) { @content; }
+  }
+  @if $size == tab {
+    @media (min-width: 768px) and (max-width: 1023px) { @content; }
+  }
+  @if $size == tab-portrait {
+    @media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) { @content; }
+  }
+  @if $size == mob-and-tab {
+    @media (max-width: 1023px) { @content; }
+  }
+  @if $size == mob-and-tab-portrait {
+    @media (max-width: 1023px) and (orientation: portrait) { @content; }
+  }
+}

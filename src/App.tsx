@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import TwitchPlayer from "./components/Twitch/Player";
+import TwitchChat from "./components/Twitch/Chat";
+import MainPlayer from "./components/Players/MainPlayer";
+import css from 'src/styles/App.module.scss';
+import StreamOffline from "./components/Covers/Offline";
+import {fetchConfig} from "./config";
+import {Config} from "./config";
+import Loader from "./components/Covers/Loader";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [twitchReady, setTwitchReady] = useState<boolean>(false);
+    const [status, setStatus] = useState<boolean | undefined>(undefined);
+    const [config, setConfig] = useState<Config>({
+        mainVideoUrl: '',
+        twitchChannel: ''
+    });
+    const [renderAvailable, setRenderAvailable] = useState<boolean>(false);
+
+    useEffect(() => {
+        fetchConfig().then((data) => {
+            setConfig(data);
+            setRenderAvailable(true);
+        });
+    }, [])
+
+    return renderAvailable ? (
+        <div className={css.layout}>
+            {!twitchReady && <Loader/>}
+            {twitchReady && status === false && <StreamOffline/>}
+            <div className={css.layout__inner}>
+                <div className={css.layout__mainSide}>
+                    <MainPlayer url={config.mainVideoUrl}/>
+                </div>
+                <div className={css.layout__rightSide}>
+                    <TwitchPlayer statusHandler={setStatus} channel={config.twitchChannel} readyHandler={setTwitchReady}/>
+                    <TwitchChat channel={config.twitchChannel}/>
+                </div>
+            </div>
+        </div>
+    ) : null;
 }
 
 export default App;

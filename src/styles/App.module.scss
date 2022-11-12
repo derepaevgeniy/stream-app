@@ -1,0 +1,14 @@
+@import "src/styles/Mixins/adaptive";
+
+.layout {
+  height: 100%;
+  &__inner {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    height: 100%;
+    @include adaptive(mob-and-tab) {
+      grid-template-columns: auto;
+      grid-template-rows: 1fr 2fr;
+    }
+  }
+}
