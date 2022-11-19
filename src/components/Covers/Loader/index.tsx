@@ -1,10 +1,16 @@
 import css from './Loader.module.scss';
 
 
-const Loader:React.FC = () => {
+interface LoaderProps {
+    text?: string
+}
+
+const Loader:React.FC<LoaderProps> = ({
+    text = 'Loading...'
+                                      }) => {
     return (
         <div className={css.cover}>
-            <h1 className={css.title}>Loading...</h1>
+            <h1 className={css.title}>{text}</h1>
         </div>
     );
 }

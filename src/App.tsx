@@ -7,6 +7,7 @@ import StreamOffline from "./components/Covers/Offline";
 import {fetchConfig} from "./config";
 import {Config} from "./config";
 import Loader from "./components/Covers/Loader";
+import MenuIcon from "./components/MenuIcon";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         twitchChannel: ''
     });
     const [renderAvailable, setRenderAvailable] = useState<boolean>(false);
+    const [menuActive, setMenuActive] = useState<boolean>(false);
 
     useEffect(() => {
         fetchConfig().then((data) => {
@@ -26,18 +28,26 @@ function App() {
         });
     }, [])
 
+    const menuButtonClick = () => {
+        setMenuActive(!menuActive);
+    }
+
     return renderAvailable ? (
         <div className={css.layout}>
             {!twitchReady && <Loader/>}
+            {twitchReady && status === undefined && <Loader text={'Connection...'}/>}
             {twitchReady && status === false && <StreamOffline/>}
             <div className={css.layout__inner}>
                 <div className={css.layout__mainSide}>
                     <MainPlayer url={config.mainVideoUrl}/>
                 </div>
-                <div className={css.layout__rightSide}>
+                <div className={`${css.layout__rightSide} ${menuActive ? css.menuOpened : ''}`}>
                     <TwitchPlayer statusHandler={setStatus} channel={config.twitchChannel} readyHandler={setTwitchReady}/>
                     <TwitchChat channel={config.twitchChannel}/>
                 </div>
+            </div>
+            <div className={css.button} onClick={menuButtonClick}>
+                <MenuIcon active={menuActive}/>
             </div>
         </div>
     ) : null;
