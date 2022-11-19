@@ -46,9 +46,11 @@ function App() {
                     <TwitchChat channel={config.twitchChannel}/>
                 </div>
             </div>
-            <div className={css.button} onClick={menuButtonClick}>
-                <MenuIcon active={menuActive}/>
-            </div>
+            {twitchReady && status && (
+                <div className={css.button} onClick={menuButtonClick}>
+                    <MenuIcon active={menuActive}/>
+                </div>
+            )}
         </div>
     ) : null;
 }
